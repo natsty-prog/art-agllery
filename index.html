@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>גלריית זרמים באמנות - פעילות אינטראקטיבית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-dark: #1a1a1a;
+            --primary-blue: #2c3e50;
+            --accent-gold: #c0a080;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1a1a1a;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            margin-top: 4rem;
+            border-right: 6px solid var(--accent-gold);
+            padding-right: 15px;
+        }
+
+        /* סגנונות חדשים לפליפ קארד */
+        .flip-card {
+            background-color: transparent;
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .flip-card-front {
+            background-color: #ffffff;
+            border: 1px solid #eee;
+        }
+
+        .flip-card-back {
+            background-color: #ffffff;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="header-gradient p-12 rounded-2xl shadow-2xl mb-12 text-center text-white">
+            <h1 class="text-3xl md:text-5xl font-serif font-bold mb-4">תולדות האמנות: בחנו את עצמכם</h1>
+            <p class="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed font-light">
+                פעילות אינטראקטיבית לזיהוי זרמים וסגנונות באמנות.
+                <br>
+                <strong>לחצו על היצירות</strong> כדי להפוך את הכרטיסייה ולגלות לאיזה זרם אמנותי הן שייכות!
+            </p>
+        </header>
+
+        <div id="gallery-container"></div>
+
+        <footer class="mt-20 p-8 border-t border-gray-200 text-center text-gray-500">
+            <p>© פעילות לימודי תולדות האמנות - האוניברסיטה הפתוחה</p>
+        </footer>
+    </div>
+
+    <script>
+        const galleryData = [
+            {
+                title: "אוסף יצירות - חלק א'", // שונה כדי לא לחשוף את התשובה מראש
+                items: [
+                    { 
+                        label: "פבלו פיקאסו, 'הריקוד' (1925)", 
+                        movement: "סוריאליזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/1.5.jpg" 
+                    },
+                    { 
+                        label: "אמיל נולדה (Emil Nolde), 'בתיאטרון' (1911)", 
+                        movement: "אקספרסיוניזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/1.7.jpg" 
+                    },
+                    { 
+                        label: "קאמי פיסארו, 'בולוואר מונמרטר בלילה' (1897)", 
+                        movement: "אימפרסיוניזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/1.9.jpg" 
+                    }
+                ]
+            },
+            {
+                title: "אוסף יצירות - חלק ב'",
+                items: [
+                    { 
+                        label: "ז'אן-אוגוסט-דומיניק אנגר, 'האודליסק עם השפחה' (1839)", 
+                        movement: "ניאו-קלאסיציזם (אוריינטליזם)",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2%20%D7%90%D7%95%D7%91%D7%9C%D7%99%D7%A1%D7%A7%20%D7%A2%D7%9D%20%D7%A2%D7%91%D7%93.jpg" 
+                    },
+                    { 
+                        label: "טיציאן, 'בכחנליה של בני אנדרוס' (1523–1526)", 
+                        movement: "רנסאנס בשיאו",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2%20%D7%91%D7%9B%D7%97%D7%A0%D7%9C%D7%99%D7%94%20%D7%91%D7%90%D7%A0%D7%93%D7%A8%D7%95%D7%A1.jpg" 
+                    },
+                    { 
+                        label: "פול גוגן, 'חיזיון לאחר הדרשה' (1888)", 
+                        movement: "פוסט-אימפרסיוניזם (סימבוליזם / סינתטיזם)",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2%20%D7%94%D7%97%D7%96%D7%95%D7%9F%20%D7%9C%D7%90%D7%97%D7%A8%20%D7%94%D7%93%D7%A8%D7%A9%D7%94.jpg" 
+                    }
+                ]
+            },
+            {
+                title: "אוסף יצירות - חלק ג'",
+                items: [
+                    { 
+                        label: "פבלו פיקאסו, 'שתי עירומות' (1906)", 
+                        movement: "קוביזם (תקופת המעבר)",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2%20%D7%A4%D7%99%D7%A7%D7%90%D7%A1%D7%95%20%D7%A9%D7%AA%D7%99%20%D7%A2%D7%A8%D7%95%D7%9E%D7%95%D7%AA.jpg" 
+                    },
+                    { 
+                        label: "פול סזאן, 'שלוש המתרחצות' (1879–1882)", 
+                        movement: "פוסט-אימפרסיוניזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2%20%D7%A9%D7%9C%D7%95%D7%A9%20%D7%94%D7%9E%D7%AA%D7%A8%D7%97%D7%A6%D7%95%D7%AA.jpg" 
+                    },
+                    { 
+                        label: "אנדרה דרן, 'נמל הדיג בקוליור' (1905)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2-7%20Andr%C3%A9%20Derain,%20Fishing%20Port%20Collioure,%201905.jpeg" 
+                    },
+                    { 
+                        label: "אנרי מאטיס, 'שמחת החיים' (1905–1906)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2.10.jpg" 
+                    },
+                    { 
+                        label: "אנרי מאטיס, 'הסטודיו האדום' (1911)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2.11.png" 
+                    },
+                    { 
+                        label: "אנרי מאטיס, 'הריקוד (II)' (1910)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2.12.jpg" 
+                    },
+                    { 
+                        label: "אנרי מאטיס, 'מוזיקה' (1910)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2.13.jpeg" 
+                    },
+                    { 
+                        label: "מוריס דה ולאמינק, 'מטעי זיתים' (1905)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2.15.jpg" 
+                    },
+                    { 
+                        label: "מוריס דה ולאמינק, 'המסעדה של מאשין בבוז'יוואל' (1905)", 
+                        movement: "פוביזם",
+                        image: "https://opal.openu.ac.il/pluginfile.php/8759342/mod_lightboxgallery/gallery_images/0/2.15a.jpeg" 
+                    }
+                ]
+            }
+        ];
+
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+
+        function init() {
+            const container = document.getElementById('gallery-container');
+
+            galleryData.forEach(section => {
+                const sectionEl = document.createElement('div');
+                
+                const h2 = document.createElement('h2');
+                h2.className = 'section-title';
+                h2.innerText = section.title;
+                sectionEl.appendChild(h2);
+
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16';
+                
+                section.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'flip-card';
+                    card.setAttribute('onclick', 'toggleFlip(this)');
+                    card.innerHTML = `
+                        <div class="flip-card-inner">
+                            <!-- חזית: תמונה ושם היצירה -->
+                            <div class="flip-card-front flex flex-col bg-white">
+                                <!-- אזור התמונה -->
+                                <div class="relative w-full flex-1 min-h-0">
+                                    <img src="${item.image}" class="w-full h-full object-cover" alt="${item.label}" loading="lazy">
+                                </div>
+                                
+                                <!-- שם היצירה (החלק הלבן למטה) -->
+                                <div class="w-full bg-white flex items-center justify-center p-3 text-center border-t border-gray-100 min-h-[3.5rem]">
+                                    <div class="font-bold text-[0.85rem] leading-tight text-gray-800">${item.label}</div>
+                                </div>
+                            </div>
+                            
+                            <!-- גב הכרטיס: הזרם האמנותי -->
+                            <div class="flip-card-back relative">
+                                <h3 class="text-gray-500 text-lg mb-2 font-serif">הזרם האמנותי:</h3>
+                                <p class="text-2xl md:text-3xl font-bold text-gray-900 text-center px-2 leading-tight">${item.movement}</p>
+                            </div>
+                        </div>`;
+                    
+                    grid.appendChild(card);
+                });
+
+                sectionEl.appendChild(grid);
+                container.appendChild(sectionEl);
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
